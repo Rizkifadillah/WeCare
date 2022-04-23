@@ -2,9 +2,10 @@
 
 namespace App\Actions\Fortify;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
@@ -18,25 +19,47 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update($user, array $input)
     {
-        Validator::make($input, [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
-        ])->validateWithBag('updateProfileInformation');
+            'path_image' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
+        ];
 
-        if (isset($input['photo'])) {
-            $user->updateProfilePhoto($input['photo']);
+        if ($input['pills'] == 'bank') {
+            # code...
+            $rules = [
+                'bank_id' => 'required|exists:bank,id|unique:bank_user,bank_id',
+                'account' => 'required|unique:bank_user,account',
+                'name' => 'required',
+            ];
         }
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
-            $this->updateVerifiedUser($user, $input);
-        } else {
-            $user->forceFill([
+        $validated = Validator::make($input, $rules);
+
+        if ($validated->fails()) {
+            return back()
+                ->withInput()
+                ->withErrors($validated->errors());
+        }
+
+        if (isset($input['path_image'])) {
+            $input['path_image'] = upload('user', $input['path_image'], 'user');
+        }
+
+        $user->update($input);
+
+        if ($input['pills'] == 'bank') {
+            # code...
+            $user->bank_user()->attach($input['bank_id'], [
+                'account' => $input['account'],
                 'name' => $input['name'],
-                'email' => $input['email'],
-            ])->save();
+            ]);
         }
+
+        return back()->with([
+            'message' => 'Pengaturan Berhasil Diperbaharui',
+            'success' => true
+        ]);
     }
 
     /**

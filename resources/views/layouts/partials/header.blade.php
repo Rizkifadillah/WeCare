@@ -2,7 +2,7 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars text-white"></i></a>
       </li>
       
     </ul>
@@ -15,7 +15,7 @@
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-comments"></i>
+          <i class="far fa-comments text-white"></i>
           <span class="badge badge-danger navbar-badge">3</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -73,7 +73,7 @@
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
+          <i class="far fa-bell text-white"></i>
           <span class="badge badge-warning navbar-badge">15</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -98,9 +98,9 @@
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" 
+        <a class="nav-link text-white" href="#" 
           onclick="document.querySelector('#form-logout').submit()">
-          <i class="fas fa-sign-out-alt"></i>Keluar
+          <i class="fas fa-sign-out-alt text-white"></i>Keluar
         </a>
         <form action="{{ route('logout')}}" method="post" id="form-logout">
           @csrf

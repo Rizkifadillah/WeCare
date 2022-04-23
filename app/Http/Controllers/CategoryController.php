@@ -8,14 +8,21 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    protected $paginate = 5;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Category::orderBy('name')->get();
+        $data = Category::orderBy('name')
+            ->when($request->has('q') && $request->q != "", function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->q . '%');
+            })
+            ->paginate($request->rows ?? $this->paginate)
+            ->appends($request->only('rows', 'q'));
+
         return view('category.index', \compact('data'));
     }
 
@@ -47,7 +54,11 @@ class CategoryController extends Controller
 
         Category::create($data);
 
-        return redirect()->route('category.index')->with('message', 'Kategori Berhasil Ditambah');
+        return redirect()->route('category.index')
+            ->with([
+                'message' => 'Kategori Berhasil Ditambah',
+                'success' => true
+            ]);
     }
 
     /**
@@ -90,7 +101,11 @@ class CategoryController extends Controller
 
         $category->update($data);
 
-        return redirect()->route('category.index')->with('message', 'Kategori Berhasil Ditambah');
+        return redirect()->route('category.index')
+            ->with([
+                'message' => 'Kategori Berhasil Ditambah',
+                'success' => true
+            ]);
     }
 
     /**
@@ -101,6 +116,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return redirect()->route('category.index')
+            ->with([
+                'message' => 'Kategori Berhasil Dihapus',
+                'success' => true
+            ]);
     }
 }

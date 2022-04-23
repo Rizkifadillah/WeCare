@@ -12,22 +12,25 @@
 @section('content')
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
-                    <form action="{{ route('category.update', $category->id)}}" method="post">
-                        @csrf
-                        @method('PUT')
-                        <div class="card-body">
-                            <div class="form-group row">
-                                <label for="name">Nama</label>
-                                <input type="text" class="form-control" name="name" value="{{$category->name}}" required>
-                            </div>
+                <form action="{{ route('category.update', $category->id)}}" method="post">
+                    @csrf
+                    @method('PUT')
+                    <x-card>
+                        <div class="form-group row">
+                            <label for="name">Nama</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') ?? $category->name}}" name="name"  required>
+                             @error('name')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                            @enderror
                         </div>
-                        <div class="card-footer">
-                            <button class="btn btn-dark">Reset</button>
+                        <x-slot name="footer">
+                            <button type="reset" class="btn btn-dark">Reset</button>
                             <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                    </form>
-                </div>
+                        </x-slot>
+                    </x-card>
+                </form>
             </div>
         </div>  
 @endsection
