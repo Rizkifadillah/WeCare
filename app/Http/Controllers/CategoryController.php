@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    protected $paginate = 5;
+    protected $paginate = 2;
     /**
      * Display a listing of the resource.
      *

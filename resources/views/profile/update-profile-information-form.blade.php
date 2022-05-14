@@ -7,7 +7,12 @@
         <div class="row justify-content-center">
             <div class="col-lg-4">
                 <div class="text-center">
-                    <img src="{{ url(auth()->user()->path_image  ?? '')}}" alt="" class="img-thumbnail preview-path_image" width="200">
+                    @if (Storage::disk('public')->exists(auth()->user()->path_image))
+                    <img src="{{ url(auth()->user()->path_image ?? '') }}" alt="" class="img-thumbnail preview-path_image" width="200"> 
+                    @else
+                    <img src="{{ asset('assets/backend/dist/img/user1-128x128.jpg') }}" alt="" class="img-thumbnail preview-path_image" width="200">
+                    @endif
+                    {{-- <img src="{{ url(auth()->user()->path_image  ?? '')}}" alt="" class="img-thumbnail preview-path_image" width="200"> --}}
                 </div>
                 <div class="form-group mt-3">
                     <div class="custom-file">

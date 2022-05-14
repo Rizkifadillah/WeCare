@@ -8,7 +8,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="form-group">
-                    <label for="bank_account">Nomor Rekening</label>
+                    <label for="bank_account">Bank</label>
                     <select name="bank_id" id="bank_id" class="custom-select @error('bank_id') is-invalid @enderror">
                         <option disable selected>Pilih salah satu</option>
                         @foreach ($bank  as $key => $item)
@@ -25,7 +25,7 @@
             <div class="col-lg-4">
                  <div class="form-group">
                     <label for="account">Nomer Rekening</label>
-                    <input type="text" class="form-control @error('account') is-invalid @enderror" name="account" 
+                    <input type="number" class="form-control @error('account') is-invalid @enderror" name="account" 
                         id="account" value=" {{  old('account') }}">
                     @error('account')
                     <span class="invalid-feedback">{{ $message}}</span>
@@ -38,6 +38,18 @@
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" 
                         id="name" value=" {{  old('name') }}">
                     @error('name')
+                    <span class="invalid-feedback">{{ $message}}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" value="{{ old('is_main') ?? 1}}" {{ old('is_main') == 1 ? 'checked' : ''}} class="custom-control-input @error('is_main') is-invalid @enderror" id="is_main" name="is_main">
+                    <label for="is_main" class="custom-control-label ">Akun Utama?</label>
+                    @error('is_main')
                     <span class="invalid-feedback">{{ $message}}</span>
                     @enderror
                 </div>
@@ -90,7 +102,7 @@
         <tr>
             <td>{{$key+1}}</td>
             <td>{{ $item->pivot->name }}</td>
-            <td>{{ $item->pivot->account }}</td>
+            <td>{{ $item->pivot->account }} {!! $item->pivot->is_main ? '<small class="text-primary"> <i class="fas fa-check-circle"></i> </small>' : '' !!}</td>
             <td>{{ $item->name }}</td>
             <td>
                 <form action="{{ route('setting.bank.delete', ['setting' => $setting->id, 'id'=> $item->id])}}" method="post">

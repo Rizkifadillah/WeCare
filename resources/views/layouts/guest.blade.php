@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-    <title>{{config('app,name')}} | @yield('title')</title>
+    <title>{{ $setting->company_name}} | @yield('title')</title>
     
     <link rel="icon" href="{{ asset('img/favicon.png')}}" type="image/*">
     <!-- Google Font: Source Sans Pro -->
@@ -26,7 +26,7 @@
           min-height: 100vh;
         }
         .bg-image{
-          background-image: url('{{ asset("/img/bg-login.jpg")}}');
+          background-image: url('{{ asset("/img/bg-login.jpg") }}');
           background-size: cover;
           background-position: center;
         }

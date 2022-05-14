@@ -59,14 +59,14 @@
 {{-- jumbotron --}}
 <div class="jumbotron d-flex justify-content-center align-items-center mb-0">
     <div class="shadow-sm p-3 bg-white-50 rounded">
-        <div class="card p-4 border text-center">
+        <div class="card p-4 border text-center mb-0">
             <h1 class="display-4 font-weight-bold">
                 GALANG DANA
             </h1>
             <p class="lead text-capitalize mt-3">
                 Untuk Hal Yang Anda Perjuangkan Demi Kemanusiaan
             </p>
-            <a href="" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
+            <a href="{{ route('campaign.create')}}" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
         </div>
     </div>
 </div>
@@ -120,30 +120,38 @@
                 </h3>
             </div>
 
-            @for ($i = 0; $i < 6; $i++)
+
+            @foreach ($campaign as $item)
                 <div class="col-lg-4 col-md-6">
                     <div class="card mt-4" >
-                        <img src="{{ asset('img/bank/bri.png')}}" alt="" class="card-img-top">
+                        <div class="rounded-top" style="height: 200px; overflow: hidden;">
+                            @if (Storage::disk('public')->exists( $item->path_image))
+                            {{-- @dd(Storage::disk('public')->url( $item->path_image)) --}}
+                                <img src="{{ Storage::disk('public')->url( $item->path_image) }}" alt="" class="card-img-top">
+                            @else
+                                <img src="{{ asset('img/bank/bri.png')}}" alt="" class="card-img-top">
+                            @endif
+                        </div>
                         <div class="card-body p-2">
                             <div class="d-flex justify-content-between text-dark">
-                                <p class="mb-0">Terkumpul: <strong>1jt</strong></p>
-                                <p class="mb-0">Goal: <strong>10jt</strong></p>
+                                <p class="mb-0">Terkumpul: <strong>Rp. {{ format_uang($item->nominal)}}</strong></p>
+                                <p class="mb-0">Goal: <strong>Rp. {{ format_uang($item->goal)}}</strong></p>
                             </div>
                         </div>
                         <div class="card-body p-2 border-top">
-                            <h5 class="card-title">Card Title</h5>
+                            <h5 class="card-title">{{ $item->title }}</h5>
                             <p class="card-text">
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam numquam deserunt maiores odit. Labore explicabo repellat totam nesciunt error similique.
+                                {{ Str::limit($item->short_description, 90)}}
                             </p>
                         </div>
-                        <div class="card-footer bg-light p-2">
-                            <a href="" class="btn btn-primary d-block rounded">
+                        <div class="card-footer p-2">
+                            <a href="{{ url('/donation/'. $item->id)}}" class="btn btn-primary d-block rounded text-white">
                                 <i class="fas fa-donate mr-2">Donasi Sekarang</i>
                             </a>
                         </div>
                     </div>
                 </div>
-            @endfor
+            @endforeach
         </div>
     </div>
 </div>
@@ -161,12 +169,15 @@
                     Dari menolong orang sekitar anda dan keluarga, hingga membantu kemanusiaan terdampak perang <br>
                     Ribuan orang telah menggunakan WE<strong class="text-primary">CARE</strong> untuk galang dana.
                 </h3>
-                <a href="#" class="btn btn-primary btn-lg rounded m-auto">Galang Dana Sekarang</a>
+                <a href="{{ route('campaign.create')}}" class="btn btn-primary btn-lg rounded m-auto">Galang Dana Sekarang</a>
             </div>
         </div>
     </div>
 </div>
-    
+
 @endsection
+
+<x-toast />
+
 
 

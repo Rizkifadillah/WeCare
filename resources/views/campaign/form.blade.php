@@ -54,7 +54,7 @@
         <div class="col-lg-6">
             <div class="from-group">
                 <label for="goal">Goal</label>
-                <input type="number" name="goal" class="form-control">
+                <input type="text" name="goal" class="form-control" onkeyup="format_uang(this)">
             </div>
         </div>
         <div class="form-group col-lg-6">
@@ -89,7 +89,7 @@
                     <label for="organisasi" class="custom-control-label font-weight-normal">Organisasi / Lembaga</label>
                 </div>
                 <div class="custom-control custom-radio">
-                    <input type="radio" name="receiver" class="custom-control-input" value="Lainnyas" id="lainnya">
+                    <input type="radio" name="receiver" class="custom-control-input" value="Lainnya" id="lainnya">
                     <label for="lainnya" class="custom-control-label font-weight-normal">Lainnya</label>
                 </div>
             </div>

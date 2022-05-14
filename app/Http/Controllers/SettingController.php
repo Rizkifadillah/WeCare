@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bank;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
@@ -84,12 +85,31 @@ class SettingController extends Controller
                 'bank_id' => 'required|exists:bank,id|unique:bank_setting,bank_id',
                 'account' => 'required|unique:bank_setting,account',
                 'name' => 'required',
+                'is_main' => [
+                    'nullable',
+                    Rule::unique('bank_setting')->where(function ($query) use ($request) {
+                        $countAvailable = $query->where('setting_id', auth()->id())
+                            ->where('is_main', 1)
+                            ->count();
+
+                        if ($request['is_main'] == 1 && $countAvailable > 0) {
+                            return false;
+                        }
+                        return true;
+                    })
+                ]
             ];
         }
 
         // return $request->all();
 
-        $this->validate($request, $rules);
+        $this->validate(
+            $request,
+            $rules,
+            [
+                'is_main.unique' => 'Akun Utama sudah ada sebelumnya'
+            ]
+        );
 
         $data = $request->except('path_image', 'path_image_header', 'path_image_footer');
 
@@ -124,7 +144,7 @@ class SettingController extends Controller
         $setting->update($data);
 
         if ($request->has('pills') && $request->pills == 'bank') {
-            $setting->bank_setting()->attach($request->bank_id, $request->only('account', 'name'));
+            $setting->bank_setting()->attach($request->bank_id, $request->only('account', 'name', 'is_main'));
         }
 
         return back()->with([

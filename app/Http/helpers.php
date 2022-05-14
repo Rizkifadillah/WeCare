@@ -44,3 +44,32 @@ if (!function_exists('tanggal_indonesia')) {
         return $text;
     }
 }
+
+
+if (! function_exists('format_bulan')) {
+    function format_bulan($bulan) 
+    {
+        $nama_bulan = array(1 =>
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        );
+
+        return $nama_bulan[(int) $bulan];
+    }
+}
+
+if (! function_exists('sembunyikan_text')) {
+    function sembunyikan_text($words, $offset = 0)
+    {
+        $text = '';
+        for ($i = 0; $i < strlen($words); $i++) { 
+            if (($i + $offset) >= strlen($words) && ! ($offset >= strlen($words))) {
+                $text .= $words[$i];
+            } else {
+                $text .= '*';
+            }
+        }
+
+        return $text;
+    }
+}
+

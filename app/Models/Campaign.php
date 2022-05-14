@@ -18,6 +18,24 @@ class Campaign extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'campaign_id', 'id');
+    }
+
+    public function cashouts()
+    {
+        return $this->hasMany(Cashout::class, 'campaign_id', 'id');
+    }
+
+    public function cashout_latest()
+    {
+        return $this->hasOne(Cashout::class, 'campaign_id', 'id')
+            ->latestOfMany();
+    }
+
+
+
     public function statusColor()
     {
         $color = '';
@@ -38,5 +56,10 @@ class Campaign extends Model
         }
 
         return $color;
+    }
+
+    public function scopeDonatur($query)
+    {
+        return $query->where('user_id', auth()->id());
     }
 }

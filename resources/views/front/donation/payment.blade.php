@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', 'Terimakasih Rizki')
+@section('title', $campaign->user->name)
 
 @push('css')
 
@@ -26,25 +26,20 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <h5 class="text-center">Terimakasih Rizki Fadillah</h5>
+            <h5 class="text-center">Terimakasih {{$campaign->user->name}}</h5>
             <div class="detail d-flex justify-content-around align-items center text-center mt-3">
-                <p>ID Transaksi #008877766</p>
-                <p>Total Tagihan <strong>Rp. {{ format_uang(300000)}}</strong></p>
+                <p>ID Transaksi #{{$donation->order_number}}</p>
+                <p>Total Tagihan <strong>Rp. {{ format_uang($donation->nominal)}}</strong></p>
             </div>
 
             <div class="row justify-content-between mt-3 mt-lg-4">
-                <div class="col-lg-3 col-md-4 text-center">
-                    <img src="{{ asset('/img/bank/bri.png')}}" alt="" class="w-100">
-                    <p class="mt-3 text-muted">000999888777666</p>
-                </div>
-                <div class="col-lg-3 col-md-4 text-center">
-                    <img src="{{ asset('/img/bank/bri.png')}}" alt="" class="w-100">
-                    <p class="mt-3 text-muted">000999888777666</p>
-                </div>
-                <div class="col-lg-3 col-md-4 text-center">
-                    <img src="{{ asset('/img/bank/bri.png')}}" alt="" class="w-100">
-                    <p class="mt-3 text-muted">000999888777666</p>
-                </div>
+                @foreach ($bank as $item)
+                    <div class="col-lg-3 col-md-4 text-center">
+                        <img src="{{ asset($item->path_image)}}" alt="" class="w-100">
+                        <p class="mt-3 text-muted">{{$item->code}}</p>
+                    </div>
+                @endforeach
+               
             </div>
 
             <p class="text-center mt-3 mt-lg-4">
@@ -53,7 +48,7 @@
             </p>
 
             <div class="text-center mt-3 mt-lg-4">
-                <a href="{{ url('/donation/1/payment-confirmation')}}" class="btn btn-primary">Konfirmasi Pembayaran</a>
+                <a href="{{ url('/donation/'.$campaign->id.'/payment-confirmation/'.$donation->order_number)}}" class="btn btn-primary">Konfirmasi Pembayaran</a>
             </div>
 
             <div class="informasi d-flex justify-content-center align-items-center mt-3 mt-lg-4" >
@@ -62,9 +57,9 @@
                 </div>
                 <div class="bg-white rounded-right info text-center w-100 p-4 h-100">
                     <p>
-                        Kami sudah membuat akun WeCare untuk anda, silahkan cek email anda.
+                        Kami sudah membuat akun {{ $setting->company_name}} untuk anda, silahkan cek email anda.
                     </p>
-                    <strong>(wecare@gmail.com)</strong> 
+                    <strong>({{$setting->email}})</strong> 
                 </div>
             </div>
         </div>
@@ -75,3 +70,4 @@
 @endsection
 
 
+<x-toast />

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>{{ $setting->company_name}}| @yield('title')</title>
+  <title>{{ $setting->company_name}} - @yield('title')</title>
 
   <link rel="icon" href="{{ $setting->path_image}}" type="image/*">
 
@@ -20,16 +20,21 @@
   <link rel="stylesheet" href="{{ asset('assets/backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}"> --}}
 
   {{-- <link rel="stylesheet" href="{{ asset('assets/backend/plugins/daterangepicker/daterangepicker.css')}}"> --}}
-
-  @stack('css_vendor')
-
   <link rel="stylesheet" href="{{ asset('assets/backend/dist/css/adminlte.min.css')}}">
+
+  
+  @stack('css_vendor')
   <style>
     .note-editor{
       margin-bottom: 0;
     }
     .note-editor.is-invalid{
       border-color: var(--danger);
+    }
+    .nav-sidebar .nav-header {
+      font-size: .6rem;
+      font-weight: bold;
+      color: #888;
     }
   </style>
   @stack('css')
@@ -103,42 +108,49 @@
 <!-- ChartJS -->
 <script src="{{ asset('assets/backend/plugins/chart.js/Chart.min.js')}}"></script>
 
-@stack('scripts_vendor')
 
-    {{-- <script src="{{ asset('assets/backend/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{ asset('assets/backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-    <script src="{{ asset('assets/backend/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{ asset('assets/backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script> --}}
-
+{{-- <script src="{{ asset('assets/backend/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{ asset('assets/backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{ asset('assets/backend/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{ asset('assets/backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script> --}}
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('assets/backend/dist/js/demo.js')}}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('assets/backend/dist/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('assets/backend/dist/js/pages/dashboard2.js')}}"></script>
 
-<script>
-  $('.custom-file-input').on('change', function (){
-    let filename = $(this).val().split('\\').pop();
-    $(this)
-          .next('.custom-file-label')
-          .addClass('selected')
-          .html(filename)
-  });
+@stack('scripts_vendor')
 
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+<script src="{{ asset('assets/backend/dist/js/adminlte.js')}}"></script>
+<script src="{{ asset('js/custom.js')}}"></script>
+{{-- <x-toast /> --}}
+{{-- <script>
+  function format_uang(input) {
+    a = input.value;
+    if (a == undefined) {
+        a = input.toString();
     }
-  })
+    b = a.replace(/[^\d]/g, "");
+    c = "";
+    length = b.length;
 
-  function preview(target, image) {
-    $(target)
-          .attr('src', window.URL.createObjectURL(image))
-          .show();
-  }
-</script>
+    j = 0;
+    for (i = length; i > 0; i--) {
+        j = j + 1;
+        if (((j % 3) == 1) && (j != 1)) {
+            c = b.substr(i - 1, 1) + "." + c;
+        } else {
+            c = b.substr(i - 1, 1) + c;
+        }
+    }
+    if (input.value == undefined) {
+        return c;
+    }
+
+    input.value = c;
+}
+</script> --}}
 @stack('scripts')
 </body>
 </html>

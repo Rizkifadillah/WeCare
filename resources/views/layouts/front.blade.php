@@ -4,8 +4,9 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <title>{{config('app,name')}} | @yield('title')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ $setting->company_name}} | @yield('title')</title>
     
     <link rel="icon" href="{{ asset('img/favicon.png')}}" type="image/*">
     <!-- Google Font: Source Sans Pro -->
@@ -13,10 +14,12 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('assets/backend/plugins/fontawesome-free/css/all.min.css')}}">
 
+      <link rel="stylesheet" href="{{ asset('assets/backend/dist/css/adminlte.min.css')}}">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
-    @stack('css-vendor')
+    @stack('css_vendor')
    
     <style>
         body {
@@ -203,23 +206,23 @@
                 {{-- sosial --}}
                 {{-- <h1>WeCare</h1> --}}
                 <div class="col-lg-3 social">
-                    <a href="" class="text-white ml-3"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="" class="text-white ml-3"><i class="fab fa-twitter"></i></a>
-                    <a href="" class="text-white ml-3"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="" class="text-white ml-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ $setting->instagram_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ $setting->twitter_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-twitter"></i></a>
+                    <a href="{{ $setting->google_plus_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="{{ $setting->fanpage_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-facebook-f"></i></a>
                 </div>
                 <div class="col-lg-7 office-info text-center">
                     <a href="" class="text-white text-decoration-none">
                         <i class="fas fa-phone-alt"></i>
-                        <span class="ml-1"> 0857-1685-5817</span>
+                        <span class="ml-1"> {{ $setting->phone }}</span>
                     </a>
                     <a href="" class="ml-3 text-white text-decoration-none">
                         <i class="far fa-clock"></i>
-                        <span class="ml-1"> Senin - Jum'at, 08:00 s/d 16:00</span>
+                        <span class="ml-1"> {{$setting->phone_hours}} </span>
                     </a>
                     <a href="" class="ml-3 text-white text-decoration-none">
                         <i class="fas fa-envelope"></i>
-                        <span class="ml-1"> support@wecare.com</span>
+                        <span class="ml-1"> {{$setting->email}}</span>
                     </a>
                 </div>
                 <div class="col-lg-2 action" style="white-space: nowrap;">
@@ -292,35 +295,36 @@
                         <h3 class="mt-2 ml-2">We<strong class="text-primary">Care</strong></h3>
                     </div>
                     <p>
-                        Jl. Tiga Putra, Meruyung <br>
-                        Limo ,Depok
+                        {{ $setting->address}} <br>
+                        {{$setting->city}} ,{{ $setting->province}}
                     </p>
-                    <p class="mb-1"><i class="fas fa-phone-alt mr-2"></i> 0857-1685-5817</p>
-                    <p class="mb-1"><i class="fas fa-envelope mr-2"></i> wecare@gmail.com</p>
-                    <p class="mb-1"><i class="fas fa-globe mr-2"></i> wecare.com</p>
+                    <p class="mb-1"><i class="fas fa-phone-alt mr-2"></i> {{ $setting->phone}}</p>
+                    <p class="mb-1"><i class="fas fa-envelope mr-2"></i> {{ $setting->email}}</p>
+                    <p class="mb-1"><i class="fas fa-globe mr-2"></i> {{ $setting->company_name}}</p>
 
                 </div>
                 <div class="col-lg-3 text-white-80 mt-2">
                     <h5 class="mb-lg-4 mb-2">Mari Berbagi</h5>
                     <p class="mb-lg-3 mb-1">
-                        <a href="" class="text-white-80 text-decoration-none">Galang Dana</a> <br>
+                        <a href="{{ url('/campaign')}}" class="text-white-80 text-decoration-none">Galang Dana</a> <br>
                         <small class="text-muted">{{ tanggal_indonesia(now())}}</small>
                     </p>
                     <p class="mb-lg-3 mb-1">
-                        <a href="" class="text-white-80 text-decoration-none">Donasi</a> <br>
+                        <a href="{{ url('/donation')}}" class="text-white-80 text-decoration-none">Donasi</a> <br>
                         <small class="text-muted">{{ tanggal_indonesia(now())}}</small>
                     </p>
                 </div>
                 <div class="col-lg-3 text-white-80 mt-2">
                     <h5 class="mb-lg-4 mb-2">Bantuan</h5>
-                    <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Tentang Kami</a></p>
-                    <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Syarat dan Ketentuan</a></p>
-                    <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Kebijakan dan Privasi</a></p>
+                    <p class="mb-lg-3 mb-1"><a href="{{ url('/about')}}" class="text-white-80 text-decoration-none">Tentang Kami</a></p>
+                    <p class="mb-lg-3 mb-1"><a href="#" class="text-white-80 text-decoration-none">Syarat dan Ketentuan</a></p>
+                    <p class="mb-lg-3 mb-1"><a href="#" class="text-white-80 text-decoration-none">Kebijakan dan Privasi</a></p>
                 </div>
                 <div class="col-lg-3 text-white-80 mt-2">
                     <h5 class="mb-lg-4 mb-2">Mari Berbagi</h5>
-                    <form action="" class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Masukan email">
+                    <form action="{{ url('/subscriber')}}" method="post" class="input-group mb-3">
+                        <input type="email" name="email" class="form-control" value="{{ old('email')}}" placeholder="Masukan email">
+                        @csrf
                         <div class="input-group-append">
                             <button class="btn btn-primary px-3">
                                 <i class="fas fa-paper-plane"></i>
@@ -331,18 +335,50 @@
             </div>
         </div>
     </div>
+
     
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 
-    @stack('script-vendor')
-
+    <script src="{{ asset('assets/backend/plugins/jquery/jquery.min.js')}}"></script>
+    <script src="{{ asset('assets/backend/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    
+    @stack('scripts_vendor')
+    
+    <script src="{{ asset('assets/backend/dist/js/adminlte.js')}}"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script> --}}
+    
+    <script src="{{ asset('js/custom.js')}}"></script>
+    {{-- <x-toast /> --}}
+    @stack('scripts')
+    
     <script>
         $('.navbar-toggler').on('click', function(){
             $(this).removeClass('first-load');
         })
     </script>
 
-    @stack('scripts')
+        
+    {{-- <script>
+        $('.custom-file-input').on('change', function (){
+            let filename = $(this).val().split('\\').pop();
+            $(this)
+                .next('.custom-file-label')
+                .addClass('selected')
+                .html(filename)
+        });
+
+        $.ajaxSetup({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+
+        function preview(target, image) {
+            $(target)
+                .attr('src', window.URL.createObjectURL(image))
+                .show();
+        }
+    </script> --}}
+
   </body>
 </html>

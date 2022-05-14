@@ -2,7 +2,7 @@
 
 @section('title', 'Galang Dana')
 
-@push('css-vendor')
+@push('css_vendor')
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stapper/dist/css/bs-stapper.min.css"> --}}
     <link rel="stylesheet" href="{{ asset('assets/backend/dist/css/bs-stepper.min.css')}}">
       <link rel="stylesheet" href="{{ asset('assets/backend/plugins/select2/css/select2.min.css')}}">
@@ -55,21 +55,28 @@
                 </div>
                 <div class="bs-stepper-content">
                     <!-- your steps content here -->
-                    <div id="judul-part" class="content" role="tabpanel" aria-labelledby="judul-part-trigger">
-                        @include('front.campaign.step.judul')
-                    </div>
-                    <div id="detail-part" class="content" role="tabpanel" aria-labelledby="detail-part-trigger">
-                        @include('front.campaign.step.detail')
-                    </div>
-                    <div id="foto-part" class="content" role="tabpanel" aria-labelledby="foto-part-trigger">
-                        @include('front.campaign.step.foto')
-                    </div>
-                    <div id="deskripsi-part" class="content" role="tabpanel" aria-labelledby="deskripsi-part-trigger">
-                        @include('front.campaign.step.deskripsi')
-                    </div>
-                    <div id="konfirmasi-part" class="content" role="tabpanel" aria-labelledby="konfirmasi-part-trigger">
-                        @include('front.campaign.step.konfirmasi')
-                    </div>
+                    <form action="{{ isset($campaign) ? route('campaign.update', $campaign->id) : route('campaign.store')}}" method="post" onsubmit="submitForm(this)" enctype="multipart/form-data" >
+                        @csrf
+                        @isset($campaign)
+                            @method('put')
+                            {{-- <input type="hidden" name="status" value="{{$campaign->status}}"> --}}
+                        @endisset
+                        <div id="judul-part" class="content" role="tabpanel" aria-labelledby="judul-part-trigger">
+                            @includeIf('front.campaign.step.judul')
+                        </div>
+                        <div id="detail-part" class="content" role="tabpanel" aria-labelledby="detail-part-trigger">
+                            @includeIf('front.campaign.step.detail')
+                        </div>
+                        <div id="foto-part" class="content" role="tabpanel" aria-labelledby="foto-part-trigger">
+                            @includeIf('front.campaign.step.foto')
+                        </div>
+                        <div id="deskripsi-part" class="content" role="tabpanel" aria-labelledby="deskripsi-part-trigger">
+                            @includeIf('front.campaign.step.deskripsi')
+                        </div>
+                        <div id="konfirmasi-part" class="content" role="tabpanel" aria-labelledby="konfirmasi-part-trigger">
+                            @includeIf('front.campaign.step.konfirmasi')
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -78,7 +85,10 @@
 
 @endsection
 
-@push('script-vendor')
+@includeIf('includes.select2')
+@includeIf('includes.summernote')
+
+@push('scripts_vendor')
     <script src="{{ asset('assets/backend/plugins/moment/moment.min.js')}}"></script>
     <script src="{{ asset('assets/backend/plugins/select2/js/select2.full.min.js')}}"></script>
 
@@ -87,12 +97,16 @@
 
 @endpush
 
-@includeIf('includes.select2')
 
 @push('scripts')
     <script>
         $(document).ready(function (){
             window.stepper = new Stepper($('.bs-stepper')[0])
+            
+            $('.bs-stepper form').on('submit', function (e) {
+                e.preventDefault();
+                return;
+            })
         });
 
         $('.select2').select2({
@@ -110,16 +124,36 @@
                 .html(filename)
         });
 
-        $.ajaxSetup({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-
         function preview(target, image) {
             $(target)
                 .attr('src', window.URL.createObjectURL(image))
                 .show();
+        }
+
+        function submitForm(originalForm){
+            $.post({
+                url:$(originalForm).attr('action'),
+                data: new FormData(originalForm),
+                dataType: 'json',
+                contentType: false,
+                cache: false,
+                processData: false
+            })
+            .done(response => {
+                showAlert(response.message, 'success');
+                resetForm(originalForm);
+
+                setTimeout(() => {
+                    document.location = '{{ route('campaign.index')}}';
+                }, 3000);
+            })
+            .fail(errors => {
+                if(errors.status == 422){
+                    loopErrors(errors.responseJSON.errors);
+                    return;
+                }
+                showAlert(errors.responseJSON.message, 'danger');
+            });
         }
 
         // $('.select2-search__field').css('width','100%');
