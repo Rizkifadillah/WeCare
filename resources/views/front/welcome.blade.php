@@ -80,28 +80,28 @@
                 <p class="icon">
                     <i class="fas fa-smile fa-4x"></i>
                 </p>
-                <p class="fa-2x font-weight-bold">4</p>
+                <p class="fa-2x font-weight-bold">{{ format_uang($donatur)}}</p>
                 <p class="fa-2x text mb-0 text-uppercase">Donatur</p>
             </div>
             <div class="col-lg-3 col-md-6">
                 <p class="icon">
                     <i class="fas fa-rocket fa-4x"></i>
                 </p>
-                <p class="fa-2x font-weight-bold">4</p>
+                <p class="fa-2x font-weight-bold">{{ format_uang($misiSukses)}}</p>
                 <p class="fa-2x text mb-0 text-uppercase">Misi Sukses</p>
             </div>
             <div class="col-lg-3 col-md-6">
                 <p class="icon">
                     <i class="fas fa-user-plus fa-4x"></i>
                 </p>
-                <p class="fa-2x font-weight-bold">4</p>
+                <p class="fa-2x font-weight-bold">{{ format_uang($relawan)}}</p>
                 <p class="fa-2x text mb-0 text-uppercase">relawan</p>
             </div>
             <div class="col-lg-3 col-md-6">
                 <p class="icon">
                     <i class="fas fa-globe fa-4x"></i>
                 </p>
-                <p class="fa-2x font-weight-bold">4</p>
+                <p class="fa-2x font-weight-bold">{{ format_uang($projek)}}</p>
                 <p class="fa-2x text mb-0 text-uppercase">project</p>
             </div>
         </div>

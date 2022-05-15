@@ -81,6 +81,7 @@ class DashboardController extends Controller
 
             ];
 
+            // range 1 hari
             $listNotifikasi = [
                 'donatur' => User::donatur()->get(), // ->whereDate('created_at', date('Y-m-d'))
                 'subscriber' => Subscriber::get(), // whereDate('created_at', date('Y-m-d'))->
